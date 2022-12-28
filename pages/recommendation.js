@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "../components/footer";
 import { getUserInfo, loginCheck } from "../utils/auth";
+import axios from "axios";
 
 export default function Recommendation() {
     const [ recommendation, setRecommendation ] = useState([]);
@@ -13,6 +14,12 @@ export default function Recommendation() {
         if(loginCheck()) {
             setUser(getUserInfo())
         } else window.location.href = "/login"
+
+        axios.get("//localhost:8080/api/destination")
+        .then((res) => {
+            console.log(res.data)
+            setRecommendation(res.data)
+        })
 
         setRecommendation([
             {
@@ -78,15 +85,15 @@ export default function Recommendation() {
                             recommendation.map((e, i) => {
                                 return (
                                     <div key={i}>
-                                        <Link href={e.link} className="flex flex-col rounded-md gap-1 w-72 h-72 bg-gray-100 hover:shadow-lg">
-                                            <img src={e.image} alt="" className="w-fit h-72" />
+                                        <Link href={`/destination/${e.id}`} className="flex flex-col rounded-md gap-1 w-72 h-72 bg-gray-100 hover:shadow-lg">
+                                            <img src={"//localhost:8080/"+e.photo_path} alt="" className="w-fit h-72" />
                                             <div className="flex justify-between px-3 pb-2">
                                                 <div className="flex flex-col">
-                                                    <b>{e.title}</b>
+                                                    <b>{e.name}</b>
                                                     <span>{e.location}</span>
                                                 </div>
                                                 <div>
-                                                    <span>{e.rating}/5</span>
+                                                    <span>{e.avg_rating}/5</span>
                                                 </div>
                                             </div>
                                         </Link>

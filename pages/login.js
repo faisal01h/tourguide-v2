@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Router } from 'next/router'
+import { loginCheck } from '../utils/auth'
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -16,7 +17,7 @@ export default function Login() {
   const [ password, setPassword ] = useState();
 
   useEffect(() => {
-
+    if(loginCheck()) window.location.href="/recommendation"
   }, []);
 
   function onLogin() {

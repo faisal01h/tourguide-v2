@@ -16,11 +16,11 @@ export default function Navbar({userInfo, text}) {
     const menus = [
         {
             text: "Home",
-            link: "recommendation"
+            link: "/recommendation"
         },
         {
             text: "About",
-            link: "about"
+            link: "/about"
         }
     ];
 
@@ -37,7 +37,7 @@ export default function Navbar({userInfo, text}) {
         <div className="absolute w-screen">
             <nav className="flex justify-between lg:px-20 px-8 py-8 items-center">
                 <div>
-                    IMAGE
+                    <img src="/logo-navbar-removebg.png" alt="logo" className="w-24" />
                 </div>
                 <div className={"lg:flex lg:gap-16 hidden "+text}>
                     {
@@ -54,7 +54,7 @@ export default function Navbar({userInfo, text}) {
                     </div>
                     {
                         dropdown?
-                        <div className={"absolute top-16 right-16 text-black"}>
+                        <div className={"absolute top-20 right-16 text-black"}>
                             <div className="flex flex-col bg-white rounded-md px-3 py-1 w-48 gap-1">
                                 <b className="break-words">{userInfo?userInfo.email:"?"}</b>
                                 <hr />

@@ -4,10 +4,37 @@ import styles from '../styles/Home.module.css'
 import InputSet from '../components/inputSet'
 import { Open_Sans } from '@next/font/google'
 import Link from 'next/link'
+import axios from 'axios'
+import { useState } from 'react'
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
 export default function Register() {
+  const [ fname, setFName ] = useState();
+  const [ lname, setLName ] = useState();
+  const [ email, setEmail ] = useState();
+  const [ password, setPassword ] = useState();
+  const [ confirmPassword, setConfirmPassword ] = useState();
+
+  function onRegister() {
+    axios.post(`//localhost:8080/api/register`, {
+      firstname: fname,
+      lastname: lname,
+      email,
+      password,
+      role: "user",
+      confirm_password: confirmPassword
+    })
+    .then((res) => {
+      localStorage.setItem("tg_user", JSON.stringify({
+        token: res.data.token,
+        email
+      }))
+      window.location.href="/recommendation"
+    })
+    .catch(console.error)
+  }
+
   return (
     <>
       <Head>
@@ -30,28 +57,32 @@ export default function Register() {
                 </div>
                 <div className="flex flex-col gap-3 items-center">
                     <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 lg:w-96 rounded-sm px-2 py-1">
-                        <label htmlFor="name" className="text-xs w-full text-secondary">Name</label>
-                        <input type={"text"} className="focus:outline-none" id="name" />
+                        <label htmlFor="fname" className="text-xs w-full text-secondary">First Name</label>
+                        <input type={"text"} className="focus:outline-none" id="fname" onChange={(e)=>setFName(e.currentTarget.value)} />
+                    </div>
+                    <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 lg:w-96 rounded-sm px-2 py-1">
+                        <label htmlFor="lname" className="text-xs w-full text-secondary">Last Name</label>
+                        <input type={"text"} className="focus:outline-none" id="lname" onChange={(e)=>setLName(e.currentTarget.value)} />
                     </div>
                     <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 lg:w-96 rounded-sm px-2 py-1">
                         <label htmlFor="email" className="text-xs w-full text-secondary">Email Address</label>
-                        <input type={"email"} className="focus:outline-none" id="email" />
+                        <input type={"email"} className="focus:outline-none" id="email" onChange={(e)=>setEmail(e.currentTarget.value)} />
                     </div>
                     <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 lg:w-96 rounded-sm px-2 py-1">
                         <label htmlFor="password" className="text-xs w-full text-secondary">Password</label>
-                        <input type={"password"} className="focus:outline-none" id="password" />
+                        <input type={"password"} className="focus:outline-none" id="password" onChange={(e)=>setPassword(e.currentTarget.value)} />
                     </div>
                     <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 lg:w-96 rounded-sm px-2 py-1">
                         <label htmlFor="confirmpassword" className="text-xs w-full text-secondary">Confirm Password</label>
-                        <input type={"password"} className="focus:outline-none" id="confirmpassword" />
+                        <input type={"password"} className="focus:outline-none" id="confirmpassword" onChange={(e)=>setConfirmPassword(e.currentTarget.value)} />
                     </div>
                     <div className="mt-5 w-full flex flex-col items-center gap-2">
-                        <button className="px-3 py-2 bg-color-primary text-white rounded-sm w-full">Register</button>
+                        <button className="px-3 py-2 bg-color-primary text-white rounded-sm w-full" onClick={onRegister}>Register</button>
                         <p className="text-xs text-secondary font-medium">Already have an account? <Link href={"login"} className="hover:text-[#4293F3]">Log in</Link>.</p>
                     </div>
                 </div>
             </div>
-            <div className='bg-black lg:w-[50vw] lg:h-screen'>
+            <div className=' lg:w-[50vw] lg:h-screen' style={{backgroundImage: 'url("/login-register-img.jpg")', backgroundSize:"cover"}}>
 
             </div>
         </div>
