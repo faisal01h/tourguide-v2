@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import axios from "axios";
 // import InputSet from '../components/inputSet'
 // import styles from '../styles/Home.module.css'
 
@@ -18,7 +19,21 @@ export default function Create() {
   useEffect(() => {}, []);
 
   function onSubmit() {
-
+    axios.post(`//localhost:8080/api/destination`, {
+      name,
+      location,
+      description,
+      budaya_name: culturalName,
+      budaya_description: culturalDescription,
+      photo_path : "media/destination/kemiren.png"
+    }, {
+      headers: {
+        Authorization: "Bearer "+JSON.parse(localStorage.tg_user).token
+      }
+    })
+    .then((res) => {
+      window.location.href = "/recommendation"
+    })
   }
 
   return (
