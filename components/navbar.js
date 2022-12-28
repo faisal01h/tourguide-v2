@@ -30,7 +30,7 @@ export default function Navbar({userInfo, text}) {
 
     function logout() {
         localStorage.removeItem("tg_user");
-        window.location.reload()
+        window.location.href = "/login"
     }
 
     return (
@@ -56,7 +56,7 @@ export default function Navbar({userInfo, text}) {
                         dropdown?
                         <div className={"absolute top-20 right-16 text-black"}>
                             <div className="flex flex-col bg-white rounded-md px-3 py-1 w-48 gap-1">
-                                <b className="break-words">{userInfo?userInfo.email:"?"}</b>
+                                <b className="break-words">{userInfo?userInfo.name:"?"}</b>
                                 <hr />
                                 <span className="hover:bg-red-300 px-1 rounded hover:text-red-800 cursor-pointer" onClick={logout}>Logout</span>
                             </div>

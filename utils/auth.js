@@ -8,5 +8,5 @@ export function loginCheck() {
 }
 
 export function getUserInfo() {
-    return JSON.parse(localStorage.tg_user)
+    if(localStorage.tg_user) return JSON.parse(localStorage.tg_user)
 }

@@ -8,64 +8,40 @@ import axios from "axios";
 
 export default function Recommendation() {
     const [ recommendation, setRecommendation ] = useState([]);
-    const [ user, setUser ] = useState({});
+    const [ user, setUser ] = useState();
+
+    function getData() {
+        axios.get("//localhost:8080/api/destination")
+        .then((res) => {
+            console.log(res.data)
+            setRecommendation(res.data)
+        })
+    }
 
     useEffect(() => {
         if(loginCheck()) {
             setUser(getUserInfo())
         } else window.location.href = "/login"
 
-        axios.get("//localhost:8080/api/destination")
-        .then((res) => {
-            console.log(res.data)
-            setRecommendation(res.data)
-        })
+        getData()
 
-        setRecommendation([
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "tour/1"
-            },
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "tour/2"
-            },
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "destination/1"
-            },
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "destination/2"
-            },
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "tour/1"
-            },
-            {
-                image: null,
-                title: "Gunung Bromo",
-                location: "Jawa Timur",
-                rating: 4.5,
-                link: "tour/2"
-            },
-        ])
+    
     }, [])
+
+    function search(val) {
+        val = val.toLowerCase()
+        if(val=== "") {
+            return getData()
+        }
+        let newRec = [];
+        for(let i = 0; i < recommendation.length; ++i) {
+            let name = recommendation[i].name.toLowerCase()
+            if(name.includes(val)) {
+                newRec.push(recommendation[i])
+            }
+        }
+        setRecommendation(newRec)
+    }
 
     return (
         <div>
@@ -74,8 +50,8 @@ export default function Recommendation() {
             </Head>
             <Navbar userInfo={user} text="text-white" />
             <div className="h-[60vh] flex flex-col justify-center items-center gap-16" style={{backgroundImage: 'url("/login-register-img.jpg")', backgroundSize:"cover", backgroundRepeat:"no-repeat", backgroundPositionY:"10%"}}>
-                <h1 className="font-bold text-3xl text-center text-white">Have a good day, {user?user.email:""}</h1>
-                <input type="text" placeholder="Search destination..." className="rounded-full px-5 py-2 w-72 lg:w-[28rem] shadow-lg focus:outline-none focus:shadow-[#4293F3]/30" />
+                <h1 className="font-bold text-3xl text-center text-white">Have a good day, {user?user.name.split(" ")[0]:""}</h1>
+                <input type="text" placeholder="Search destination..." className="rounded-full px-5 py-2 w-72 lg:w-[28rem] shadow-lg focus:outline-none focus:shadow-[#4293F3]/30" onChange={(e)=>search(e.currentTarget.value)} />
             </div>
             <div className="relative -top-8 bg-white rounded-t-3xl h-full py-8">
                 <div className="flex flex-col gap-5 items-center">

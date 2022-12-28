@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Open_Sans } from "@next/font/google";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { getUserInfo } from "../../utils/auth";
+import { getUserInfo, loginCheck } from "../../utils/auth";
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -15,9 +15,12 @@ export default function Destination() {
     const [ rating, setRating ] = useState();
     const [ desc, setDesc ] = useState("");
     const [ loc, setLoc ] = useState("");
+    const [ photo, setPhoto ] = useState("");
     const [ toggleReviewInput, setToggleReviewInput ] = useState(false);
     const [ input, setInput ] = useState();
+    const [ rate, setRate ] = useState();
     const [ reviews, setReviews ] = useState([]);
+    const [ user, setUser ] = useState();
 
     let month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -25,6 +28,9 @@ export default function Destination() {
     const queryParams = router.query;
 
     useEffect(() => {
+        if(loginCheck()) {
+            setUser(getUserInfo())
+        } else window.location.href="/login"
         setTitle("Touring Guide");
         if(queryParams.id) {
             console.log(queryParams.id)
@@ -36,6 +42,7 @@ export default function Destination() {
                 setRating(res.data.avg_rating)
                 setDesc(res.data.description)
                 setLoc(res.data.location)
+                setPhoto(res.data.photo_path)
 
                 axios.get("//localhost:8080/api/review/"+res.data.id)
                 .then((e) => {
@@ -46,14 +53,29 @@ export default function Destination() {
         }
     }, [queryParams])
 
+    function submitReview() {
+        axios.post("//localhost:8080/api/review", {
+            destination_id: queryParams.id,
+            review: input,
+            rating: Number.parseInt(rate)
+        }, {
+            headers: {
+                Authorization: "Bearer "+JSON.parse(localStorage.tg_user).token
+            }
+        })
+        .then((res) => {
+            window.location.reload()
+        })
+    }
+
     return (
         <div className={openSans.classname}>
             <Head>
                 <title>{title}</title>
             </Head>
-            <Navbar text="text-black" userInfo={getUserInfo()} />
+            <Navbar text="text-black" userInfo={user} />
             <div className="flex gap-3 lg:gap-5 flex-wrap pt-24 px-5 lg:px-20">
-                <img src="" className="lg:w-[50vw] w-[80vw] bg-gray-600 rounded" />
+                <img src={"//localhost:8080/"+photo} className="lg:w-[50vw] w-[80vw] rounded" />
                 <div className="flex flex-col gap-5">
                     <div className="flex flex-col gap-1">
                         <h1 className="font-bold text-4xl">{title}</h1>
@@ -105,9 +127,18 @@ export default function Destination() {
                     !toggleReviewInput ?
                     <button className="bg-color-primary py-1 px-3 w-fit rounded-full self-center text-white hover:bg-blue-600" onClick={()=>setToggleReviewInput(true)}>Add Review</button>
                     :
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2 mt-5">
+                        <b>Add Review</b>
                         <textarea onChange={(e)=>setInput(e.currentTarget.value)} className="outline outline-1 focus:outline-blue-500 rounded-md px-3 py-1 w-full"></textarea>
-                        <button className="bg-blue-500 rounded-md w-24 text-white py-1 px-3">Submit</button>
+                        <select className="outline outline-1 focus:outline-blue-500 rounded-md" onChange={(e)=>setRate(e.currentTarget.value)}>
+                            <option>Rating</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                        <button className="bg-blue-500 rounded-md w-24 text-white py-1 px-3" onClick={submitReview}>Submit</button>
                     </div>
                 }
             </div>

@@ -26,10 +26,11 @@ export default function Login() {
       password
     })
     .then((res) => {
-      
+        
         localStorage.setItem("tg_user", JSON.stringify({
           token: res.data.token,
-          email
+          email,
+          name: res.data.fullname
         }))
         window.location.href = "/recommendation"
     })
