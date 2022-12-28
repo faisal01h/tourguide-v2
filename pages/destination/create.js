@@ -17,6 +17,10 @@ export default function Create() {
 
   useEffect(() => {}, []);
 
+  function onSubmit() {
+
+  }
+
   return (
     <>
       <Head>
@@ -38,9 +42,8 @@ export default function Create() {
               <div className="outline outline-1 focus-within:outline-[#4293F3] outline-[#8E8E8E] flex flex-col w-80 h-80 lg:w-96 rounded-sm px-2 py-1">
                 <input type={"text"} className="focus:outline-none" placeholder="Description" id="destinationDescription" onChange={(e) => setDestinationDescription(e.currentTarget.value)} />
               </div>
-
               <div className="mt-5 w-full flex flex-col items-center gap-2">
-                <button className="px-3 py-2 bg-[#1045CD] text-white rounded-full w-24" onClick={onLogin}>
+                <button className="px-3 py-2 bg-[#1045CD] text-white rounded-full w-24" onClick={onSubmit}>
                   Submit
                 </button>
               </div>

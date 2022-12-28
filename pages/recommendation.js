@@ -3,11 +3,17 @@ import Navbar from "../components/navbar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "../components/footer";
+import { getUserInfo, loginCheck } from "../utils/auth";
 
 export default function Recommendation() {
     const [ recommendation, setRecommendation ] = useState([]);
+    const [ user, setUser ] = useState({});
 
     useEffect(() => {
+        if(loginCheck()) {
+            setUser(getUserInfo())
+        } else window.location.href = "/login"
+
         setRecommendation([
             {
                 image: null,
@@ -59,9 +65,9 @@ export default function Recommendation() {
             <Head>
                 <title>Touring Guide</title>
             </Head>
-            <Navbar userInfo={""} />
-            <div className="h-[60vh] flex flex-col justify-center items-center gap-16 bg-gray-600">
-                <h1 className="font-bold text-3xl text-center">Have a good day, firstname</h1>
+            <Navbar userInfo={user} text="text-white" />
+            <div className="h-[60vh] flex flex-col justify-center items-center gap-16" style={{backgroundImage: 'url("/login-register-img.jpg")', backgroundSize:"cover", backgroundRepeat:"no-repeat", backgroundPositionY:"10%"}}>
+                <h1 className="font-bold text-3xl text-center text-white">Have a good day, {user?user.email:""}</h1>
                 <input type="text" placeholder="Search destination..." className="rounded-full px-5 py-2 w-72 lg:w-[28rem] shadow-lg focus:outline-none focus:shadow-[#4293F3]/30" />
             </div>
             <div className="relative -top-8 bg-white rounded-t-3xl h-full py-8">

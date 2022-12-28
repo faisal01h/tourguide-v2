@@ -18,7 +18,7 @@ export default function Destination() {
             <Head>
                 <title>destname</title>
             </Head>
-            <Navbar />
+            <Navbar text="text-black" />
             <div className="flex gap-3 lg:gap-5 flex-wrap pt-24 px-5 lg:px-20">
                 <img src="" className="lg:w-[50vw] w-[80vw] bg-gray-600 rounded" />
                 <div className="flex flex-col gap-5">

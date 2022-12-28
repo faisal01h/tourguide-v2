@@ -5,6 +5,8 @@ import InputSet from '../components/inputSet'
 import { Open_Sans } from '@next/font/google'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { Router } from 'next/router'
 
 const openSans = Open_Sans({ subsets: ['latin'] });
 
@@ -18,10 +20,17 @@ export default function Login() {
   }, []);
 
   function onLogin() {
-    axios.post(``)
+    axios.post(`//localhost:8080/api/login`, {
+      email,
+      password
+    })
     .then((res) => {
-        
-        
+      
+        localStorage.setItem("tg_user", JSON.stringify({
+          token: res.data.token,
+          email
+        }))
+        window.location.href = "/recommendation"
     })
     .catch((err) => {
         console.error(err);
@@ -73,7 +82,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-            <div className='bg-black lg:w-[50vw] lg:h-screen'>
+            <div className='lg:w-[50vw] lg:h-screen' style={{backgroundImage: 'url("/login-register-img.jpg")', backgroundSize:"cover"}}>
 
             </div>
         </div>
