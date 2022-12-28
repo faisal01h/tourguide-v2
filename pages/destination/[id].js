@@ -39,7 +39,7 @@ export default function Destination() {
                 console.log(res.data)
                 setTitle(res.data.name)
                 setCulture([res.data.budaya_name, res.data.budaya_description])
-                setRating(res.data.avg_rating)
+                setRating(res.data.avg_rating.toFixed(1))
                 setDesc(res.data.description)
                 setLoc(res.data.location)
                 setPhoto(res.data.photo_path)
@@ -54,8 +54,8 @@ export default function Destination() {
     }, [queryParams])
 
     function submitReview() {
-        axios.post("//localhost:8080/api/review", {
-            destination_id: queryParams.id,
+        axios.post("//localhost:8080/api/review/"+queryParams.id, {
+            // destination_id: queryParams.id,
             review: input,
             rating: Number.parseInt(rate)
         }, {
@@ -103,7 +103,7 @@ export default function Destination() {
             <div className="flex flex-col px-5 lg:px-20 my-8 gap-2">
                 <h2 className="font-medium text-lg">Review</h2>
                 {
-                    reviews.map((e, i) => {
+                    reviews && reviews.length > 0 ? reviews.map((e, i) => {
                         let dt = new Date(e.created_at)
                         return (
                             <div className="flex flex-col gap-2" key={i}>
@@ -121,7 +121,10 @@ export default function Destination() {
                                 <p>{e.review}</p>
                             </div>
                         )
-                    })
+                    }) : 
+                    <div>
+                        <span>Belum ada review</span>
+                    </div>
                 }
                 {
                     !toggleReviewInput ?

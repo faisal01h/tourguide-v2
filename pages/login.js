@@ -30,7 +30,8 @@ export default function Login() {
         localStorage.setItem("tg_user", JSON.stringify({
           token: res.data.token,
           email,
-          name: res.data.fullname
+          name: res.data.fullname,
+          role: res.data.role
         }))
         window.location.href = "/recommendation"
     })

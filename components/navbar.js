@@ -11,6 +11,11 @@ const openSans = Open_Sans({ subsets: ['latin'] });
 export default function Navbar({userInfo, text}) {
 
     const [ dropdown, setDropdown ] = useState(false);
+    const [ user, setUser ] = useState()
+
+    useEffect(() => {
+        setUser(getUserInfo())
+    }, [])
     
 
     const menus = [
@@ -49,6 +54,13 @@ export default function Navbar({userInfo, text}) {
                             )
                         })
                     }
+                    {
+                        user && user.role === "admin" ?
+                        <div className={`${openSans.classname} font-bold tracking-wide`}>
+                            <Link href="/destination/create">Create Destination</Link>
+                        </div>
+                        : ""
+                    }
                     <div onClick={toggleDropdown}>
                         <FaUser />
                     </div>
@@ -56,7 +68,7 @@ export default function Navbar({userInfo, text}) {
                         dropdown?
                         <div className={"absolute top-20 right-16 text-black"}>
                             <div className="flex flex-col bg-white rounded-md px-3 py-1 w-48 gap-1">
-                                <b className="break-words">{userInfo?userInfo.name:"?"}</b>
+                                <b className="break-words px-1">{userInfo?userInfo.name:"?"}</b>
                                 <hr />
                                 <span className="hover:bg-red-300 px-1 rounded hover:text-red-800 cursor-pointer" onClick={logout}>Logout</span>
                             </div>

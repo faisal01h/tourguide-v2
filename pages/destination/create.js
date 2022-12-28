@@ -25,7 +25,7 @@ export default function Create() {
       description,
       budaya_name: culturalName,
       budaya_description: culturalDescription,
-      photo_path : "media/destination/kemiren.png"
+      // photo_path : "media/destination/kemiren.png"
     }, {
       headers: {
         Authorization: "Bearer "+JSON.parse(localStorage.tg_user).token
